@@ -67,7 +67,7 @@ function handleLogout() {
     authStore.logout();
 
     // 2. Điều hướng người dùng về trang Đăng nhập
-    router.push({ name: 'Login' });
+    router.push({ name: 'login' });
 }
 </script>
 

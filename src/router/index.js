@@ -36,7 +36,7 @@ const routes = [
   },
   {
     path: "/login",
-    name: "Login",
+    name: "login",
     component: Login,
   },
   // Các routes độc giả
@@ -142,7 +142,7 @@ router.beforeEach((to, from, next) => {
       next();
     } else {
       // chưa đăng nhập -> Chuyển hướng về trang đăng nhập
-      next({ name: "Login" });
+      next({ name: "login" });
     }
     s;
   } else {

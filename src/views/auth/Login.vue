@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-5">
@@ -34,14 +34,13 @@
         </div>
     </div>
 </template>
-
 <script>
 import AuthService from "@/services/auth.service";
-// Đảm bảo đường dẫn này đúng: src/stores/authStore.js
 import { useAuthStore } from "@/stores/authStore";
-
+import LoginForm from "@/components/LoginForm.vue";
 export default {
     name: "Login",
+    components: { LoginForm },
     data() {
         return {
             credentials: {
@@ -86,5 +85,25 @@ export default {
             }
         },
     },
+};
+</script> -->
+
+<template>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4">
+                <!-- Gọi component LoginForm -->
+                <LoginForm />
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+import LoginForm from "@/components/auth/LoginForm.vue";
+
+export default {
+    name: "Login",
+    components: { LoginForm },
 };
 </script>
