@@ -1,23 +1,50 @@
 import { createWebHistory, createRouter } from "vue-router";
-import Login from "@/views/Login.vue";
+import { useAuthStore } from "@/stores/authStore";
+
+import Login from "@/views/auth/Login.vue";
+import Register from "@/views/auth/Register.vue";
+import HomeView from "@/views/HomeView.vue";
+
 import DocGiaList from "@/views/docgia/DocGiaList.vue";
 import DocGiaAdd from "@/views/docgia/DocGiaAdd.vue";
 import DocGiaEdit from "@/views/docgia/DocGiaEdit.vue";
+
 import NhaXuatBanList from "@/views/nhaxuatban/NhaXuatBanList.vue";
 import NhaXuatBanAdd from "@/views/nhaxuatban/NhaXuatBanAdd.vue";
 import NhaXuatBanEdit from "@/views/nhaxuatban/NhaXuatBanEdit.vue";
+
+import SachList from "@/views/sach/SachList.vue";
+import SachAdd from "@/views/sach/SachAdd.vue";
+import SachEdit from "@/views/sach/SachEdit.vue";
+
+import TheoDoiMuonSachList from "@/views/theodoimuonsach/TheoDoiMuonSachList.vue";
+import TheoDoiMuonSachAdd from "@/views/theodoimuonsach/TheoDoiMuonSachAdd.vue";
+import TheoDoiMuonSachEdit from "@/views/theodoimuonsach/TheoDoiMuonSachEdit.vue";
+
 const routes = [
+  // ROUTE TRANG CHỦ
   {
     path: "/",
+    name: "home",
+    component: HomeView,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/register",
+    name: "register",
+    component: Register,
+  },
+  {
+    path: "/login",
     name: "Login",
     component: Login,
   },
   // Các routes độc giả
   {
     path: "/docgia",
-    name: "docgia",
+    name: "docgia.list",
     component: DocGiaList,
-    meta: { requireAuth: true },
+    meta: { requiresAuth: true },
   },
   {
     path: "/docgia/add",
@@ -32,7 +59,7 @@ const routes = [
     props: true,
     meta: { requiresAuth: true },
   },
-  // CÁC ROUTES NXB (Đã có)
+  // CÁC ROUTES NXB
   {
     path: "/nhaxuatban",
     name: "nxb.list",
@@ -52,11 +79,76 @@ const routes = [
     props: true,
     meta: { requiresAuth: true },
   },
+
+  // Các routes sách
+  {
+    path: "/sach",
+    name: "sach.list",
+    component: SachList,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/sach/add",
+    name: "sach.add",
+    component: SachAdd,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/sach/:id",
+    name: "sach.edit",
+    component: SachEdit,
+    props: true,
+    meta: { requiresAuth: true },
+  },
+
+  // Các routes THEO DÕI MƯỢN SÁCH
+  {
+    path: "/theodoimuonsach",
+    name: "theodoimuonsach.list",
+    component: TheoDoiMuonSachList,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/theodoimuonsach/add",
+    name: "theodoimuonsach.add",
+    component: TheoDoiMuonSachAdd,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/theodoimuonsach/edit/:id",
+    name: "theodoimuonsach.edit",
+    component: TheoDoiMuonSachEdit,
+    props: true,
+    meta: { requiresAuth: true },
+  },
 ];
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore();
+  const isAuthenticated = authStore.isLoggedIn;
+
+  // SỬ DỤNG 'to.matched.some' để kiểm tra thuộc tính 'requiresAuth'
+  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+
+  // Kiểm tra route đích yêu cầu xác thực
+  if (requiresAuth) {
+    if (isAuthenticated) {
+      // đã đăng nhập -> cho phép đi tiếp
+      next();
+    } else {
+      // chưa đăng nhập -> Chuyển hướng về trang đăng nhập
+      next({ name: "Login" });
+    }
+    s;
+  } else {
+    // các route không yêu cầu xác thực (Login, Register, Home) -> Cho phép đi tiếp
+    next();
+  }
 });
 
 export default router;

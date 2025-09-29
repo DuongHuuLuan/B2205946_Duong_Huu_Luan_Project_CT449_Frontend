@@ -1,21 +1,21 @@
 <template>
     <div class="container mt-4">
-        <h2 class="mb-3">Thêm Nhà Xuất bản</h2>
+        <h2 class="mb-3">Thêm Sách</h2>
 
         <div v-if="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
         <div v-if="successMessage" class="alert alert-success">{{ successMessage }}</div>
 
-        <NhaXuatBanForm :nxb="{}" @submit:nxb="addNXB" />
+        <SachForm :sach="{}" @submit:sach="addSach" />
     </div>
 </template>
 
 <script>
-import NhaXuatBanForm from '@/components/nhaxuatban/NhaXuatBanForm.vue';
-import nhaxuatbanService from '@/services/nhaxuatban.service';
+import SachForm from "@/components/sach/SachForm.vue";
+import SachService from "@/services/sach.service";
 
 export default {
-    name: "NhaXuatBanAdd",
-    components: { NhaXuatBanForm },
+    name: "SachAdd",
+    components: { SachForm },
     data() {
         return {
             errorMessage: "",
@@ -23,13 +23,13 @@ export default {
         };
     },
     methods: {
-        async addNXB(nxb) {
+        async addSach(newSach) {
             try {
-                await nhaxuatbanService.create(nxb);
+                await SachService.create(newSach);
                 this.successMessage = "Thêm mới thành công!";
-                setTimeout(() => this.$router.push({ name: "nxb.list" }), 1500);
+                setTimeout(() => this.$router.push({ name: "sach.list" }), 1500);
             } catch (error) {
-                this.errorMessage = "Không thể thêm mới. Vui lòng thử lại!";
+                this.errorMessage = "Thêm mới thất bại.";
                 console.error(error);
             }
         },

@@ -1,43 +1,43 @@
 <template>
     <div class="container mt-4">
-        <h2 class="mb-3">Cập Nhật Độc Giả</h2>
+        <h2 class="mb-3">Cập Nhật Sách</h2>
 
         <div v-if="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
         <div v-if="successMessage" class="alert alert-success">{{ successMessage }}</div>
 
-        <DocGiaForm v-if="docGia" :docGia="docGia" @submit:docgia="updateDocGia" />
+        <SachForm v-if="sach" :sach="sach" @submit:sach="updateSach" />
         <p v-else>Đang tải dữ liệu...</p>
     </div>
 </template>
 
 <script>
-import DocGiaForm from "@/components/docgia/DocGiaForm.vue";
-import DocGiaService from "@/services/docgia.service";
+import SachForm from "@/components/sach/SachForm.vue";
+import SachService from "@/services/sach.service";
 
 export default {
-    name: "DocGiaEdit",
-    components: { DocGiaForm },
+    name: "SachEdit",
+    components: { SachForm },
     data() {
         return {
-            docGia: null,
+            sach: null,
             errorMessage: "",
             successMessage: "",
         };
     },
     methods: {
-        async loadDocGia() {
+        async loadSach() {
             try {
-                this.docGia = await DocGiaService.get(this.$route.params.id);
+                this.sach = await SachService.get(this.$route.params.id);
             } catch (error) {
-                this.errorMessage = "Không thể tải dữ liệu Độc Giả.";
+                this.errorMessage = "Không thể tải dữ liệu Sách.";
                 console.error(error);
             }
         },
-        async updateDocGia(updatedDocGia) {
+        async updateSach(updatedSach) {
             try {
-                await DocGiaService.update(this.$route.params.id, updatedDocGia);
+                await SachService.update(this.$route.params.id, updatedSach);
                 this.successMessage = "Cập nhật thành công!";
-                setTimeout(() => this.$router.push({ name: "docgia.list" }), 1500);
+                setTimeout(() => this.$router.push({ name: "sach.list" }), 1500);
             } catch (error) {
                 this.errorMessage = "Cập nhật thất bại.";
                 console.error(error);
@@ -45,7 +45,7 @@ export default {
         },
     },
     mounted() {
-        this.loadDocGia();
+        this.loadSach();
     },
 };
 </script>

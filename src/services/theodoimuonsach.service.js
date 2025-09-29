@@ -1,14 +1,14 @@
-import { data } from "jquery";
 import createApiClient from "./api.service";
 
-class DocgiaService {
-  constructor(baseURL = "/api/docgia") {
+class TheoDoiMuonSachService {
+  constructor(baseURL = "/api/theodoimuonsach") {
     this.api = createApiClient(baseURL);
   }
 
   async create(data) {
     return (await this.api.post("/", data)).data;
   }
+
   async getAll() {
     return (await this.api.get("/")).data;
   }
@@ -30,4 +30,4 @@ class DocgiaService {
   }
 }
 
-export default new DocgiaService();
+export default new TheoDoiMuonSachService();

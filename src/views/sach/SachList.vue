@@ -1,0 +1,87 @@
+<template>
+    <div class="container mt-4">
+        <h2 class="mb-3">Danh sách Sách</h2>
+
+        <router-link to="/sach/add" class="btn btn-primary mb-3">
+            Thêm Sách
+        </router-link>
+
+        <div v-if="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Mã Sách</th>
+                    <th>Tên Sách</th>
+                    <th>Đơn Giá</th>
+                    <th>Số Quyển</th>
+                    <th>Năm XB</th>
+                    <th>Mã NXB</th>
+                    <th>Tác Giả / Nguồn Gốc</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="sach in sachList" :key="sach._id">
+                    <td>{{ sach.MaSach || sach._id }}</td>
+                    <td>{{ sach.TenSach }}</td>
+                    <td>{{ sach.DonGia }}</td>
+                    <td>{{ sach.SoQuyen }}</td>
+                    <td>{{ sach.NamXuatBan }}</td>
+                    <td>{{ sach.MaNXB }}</td>
+                    <td>{{ sach.TacGia || sach.NguonGoc }}</td>
+                    <td>
+                        <router-link :to="{ name: 'sach.edit', params: { id: sach._id } }"
+                            class="btn btn-warning btn-sm me-2">
+                            Sửa
+                        </router-link>
+                        <button class="btn btn-danger btn-sm" @click="deleteSach(sach._id)">
+                            Xóa
+                        </button>
+                    </td>
+                </tr>
+                <tr v-if="sachList.length === 0">
+                    <td colspan="8" class="text-center">Không có dữ liệu.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</template>
+
+<script>
+import SachService from "@/services/sach.service";
+
+export default {
+    name: "SachList",
+    data() {
+        return {
+            sachList: [],
+            errorMessage: "",
+        };
+    },
+    methods: {
+        async loadSach() {
+            try {
+                this.sachList = await SachService.getAll();
+            } catch (error) {
+                this.errorMessage = "Không thể tải danh sách Sách.";
+                console.error(error);
+            }
+        },
+        async deleteSach(id) {
+            if (confirm("Bạn có chắc muốn xóa Sách này?")) {
+                try {
+                    await SachService.delete(id);
+                    this.sachList = this.sachList.filter((s) => s._id !== id);
+                } catch (error) {
+                    this.errorMessage = "Xóa thất bại.";
+                    console.error(error);
+                }
+            }
+        },
+    },
+    mounted() {
+        this.loadSach();
+    },
+};
+</script>

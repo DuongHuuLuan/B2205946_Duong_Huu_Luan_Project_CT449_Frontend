@@ -6,7 +6,6 @@ class NhaXuatBanService {
   }
 
   async create(data) {
-    // Gọi API POST tới /api/nhaxuatban
     return (await this.api.post("/", data)).data;
   }
 
