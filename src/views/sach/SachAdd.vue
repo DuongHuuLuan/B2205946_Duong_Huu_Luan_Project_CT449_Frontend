@@ -5,13 +5,14 @@
         <div v-if="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
         <div v-if="successMessage" class="alert alert-success">{{ successMessage }}</div>
 
-        <SachForm :sach="{}" @submit:sach="addSach" />
+        <SachForm :sach="{}" :nxbList="dsNXB" @submit:sach="addSach" />
     </div>
 </template>
 
 <script>
 import SachForm from "@/components/sach/SachForm.vue";
 import SachService from "@/services/sach.service";
+import NxbService from "@/services/nhaxuatban.service";
 
 export default {
     name: "SachAdd",
@@ -20,7 +21,15 @@ export default {
         return {
             errorMessage: "",
             successMessage: "",
+            dsNXB: []
         };
+    },
+    async mounted() {
+        try {
+            this.dsNXB = await NxbService.getAll();
+        } catch (error) {
+            console.error("Không load được NXB:", error);
+        }
     },
     methods: {
         async addSach(newSach) {
@@ -32,7 +41,7 @@ export default {
                 this.errorMessage = "Thêm mới thất bại.";
                 console.error(error);
             }
-        },
-    },
+        }
+    }
 };
 </script>

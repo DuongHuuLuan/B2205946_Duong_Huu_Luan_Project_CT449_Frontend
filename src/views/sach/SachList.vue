@@ -71,14 +71,19 @@ export default {
         async deleteSach(id) {
             if (confirm("Bạn có chắc muốn xóa Sách này?")) {
                 try {
-                    await SachService.delete(id);
-                    this.sachList = this.sachList.filter((s) => s._id !== id);
+                    const res = await SachService.delete(id);
+                    if (res.status === 200 || res.status === 204) {
+                        this.sachList = this.sachList.filter((s) => s._id !== id);
+                    } else {
+                        this.errorMessage = "Xóa thất bại.";
+                    }
                 } catch (error) {
                     this.errorMessage = "Xóa thất bại.";
                     console.error(error);
                 }
             }
-        },
+        }
+
     },
     mounted() {
         this.loadSach();

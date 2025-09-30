@@ -103,7 +103,7 @@ export default {
 import LoginForm from "@/components/auth/LoginForm.vue";
 
 export default {
-    name: "Login",
+    name: "login",
     components: { LoginForm },
 };
 </script>

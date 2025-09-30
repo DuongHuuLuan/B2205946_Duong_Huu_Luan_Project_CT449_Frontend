@@ -13,7 +13,6 @@ class AuthService {
     return (await this.api.post("/register", data)).data;
   }
 
-  // Logic này vẫn chính xác vì this.api đã có Base URL là http://localhost:3000/api/auth
   async login(data) {
     return (await this.api.post("/login", data)).data;
   }

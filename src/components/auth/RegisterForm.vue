@@ -31,12 +31,18 @@
 
                     <div class="mb-3">
                         <label for="chucvu" class="form-label">Chức Vụ:</label>
-                        <input type="text" id="chucvu" class="form-control" v-model="user.Chucvu" />
+                        <select id="chucvu" class="form-control" v-model="user.ChucVu" required>
+                            <option value="">-- Chọn chức vụ --</option>
+                            <option value="Admin">Admin</option>
+                            <option value="QuanLy">Quản lý</option>
+                            <option value="ThuThu">Thủ Thư</option>
+                            <option value="HoTro">Hỗ Trợ</option>
+                        </select>
                     </div>
 
                     <div class="mb-3">
                         <label for="diachi" class="form-label">Địa Chỉ:</label>
-                        <input type="text" id="diachi" class="form-control" v-model="user.Diachi" />
+                        <input type="text" id="diachi" class="form-control" v-model="user.DiaChi" />
                     </div>
 
                     <div class="mb-3">
@@ -67,8 +73,8 @@ export default {
                 MSNV: "",
                 HoTenNV: "",
                 Password: "",
-                Chucvu: "",
-                Diachi: "",
+                ChucVu: "",
+                DiaChi: "",
                 SoDienThoai: "",
             },
             errorMessage: "",

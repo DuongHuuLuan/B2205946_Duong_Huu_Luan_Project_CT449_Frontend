@@ -26,8 +26,13 @@
         </div>
 
         <div class="mb-3">
-            <label for="MaNXB" class="form-label">Mã NXB:</label>
-            <input type="text" id="MaNXB" class="form-control" v-model="sachLocal.MaNXB" required />
+            <label for="MaNXB" class="form-label">Mã Nhà Xuất Bản:</label>
+            <select id="MaNXB" class="form-select" v-model="sachLocal.MaNXB" required>
+                <option value="" disabled>-- Chọn Mã Nhà Xuất Bản --</option>
+                <option v-for="n in nxbList" :key="n._id" :value="n.MaNXB">
+                    {{ n.MaNXB }} - {{ n.TenNXB }}
+                </option>
+            </select>
         </div>
 
         <div class="mb-3">
@@ -44,7 +49,10 @@
 <script>
 export default {
     name: "SachForm",
-    props: { sach: { type: Object, required: true } },
+    props: {
+        sach: { type: Object, required: true },
+        nxbList: { type: Array, default: () => [] }
+    },
     emits: ["submit:sach"],
     data() {
         return {
@@ -64,6 +72,10 @@ export default {
         submitSach() {
             if (!this.sachLocal.TenSach || !String(this.sachLocal.TenSach).trim()) {
                 alert("Vui lòng nhập Tên Sách.");
+                return;
+            }
+            if (!this.sachLocal.MaNXB) {
+                alert("Vui lòng chọn Mã Nhà Xuất Bản.");
                 return;
             }
             const payload = { ...this.sachLocal };
