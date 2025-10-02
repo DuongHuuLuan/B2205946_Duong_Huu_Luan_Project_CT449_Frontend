@@ -1,10 +1,7 @@
+// File: src/views/nhaxuatban/NhaXuatBanEdit.vue
 <template>
     <div class="container mt-4">
         <h2 class="mb-3">Cập Nhật Nhà Xuất Bản</h2>
-
-        <div v-if="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
-        <div v-if="successMessage" class="alert alert-success">{{ successMessage }}</div>
-
         <NhaXuatBanForm v-if="nxb" :nxb="nxb" @submit:nxb="updateNXB" />
         <p v-else>Đang tải dữ liệu...</p>
     </div>
@@ -13,6 +10,7 @@
 <script>
 import NhaXuatBanForm from '@/components/nhaxuatban/NhaXuatBanForm.vue';
 import NhaXuatBanService from '@/services/nhaxuatban.service';
+import Swal from "sweetalert2"; // 👈 Import SweetAlert2
 
 export default {
     name: "NhaXuatBanEdit",
@@ -20,27 +18,46 @@ export default {
     data() {
         return {
             nxb: null,
-            errorMessage: "",
-            successMessage: "",
+            // Xóa errorMessage và successMessage
         };
     },
     methods: {
         async loadNXB() {
             try {
                 const id = this.$route.params.id;
+                // Giả định service.get(id) trả về nxb object
                 this.nxb = await NhaXuatBanService.get(id);
             } catch (error) {
-                this.errorMessage = "Không thể tải dữ liệu Nhà Xuất Bản.";
+                // Thay thế errorMessage bằng Swal.fire
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi!',
+                    text: 'Không thể tải dữ liệu Nhà Xuất Bản.',
+                });
                 console.error(error);
             }
         },
         async updateNXB(updatedNXB) {
             try {
                 await NhaXuatBanService.update(this.$route.params.id, updatedNXB);
-                this.successMessage = "Cập nhật thành công!";
-                setTimeout(() => this.$router.push({ name: "nxb.list" }), 1500);
+
+                // Thay thế successMessage bằng Swal.fire
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công!',
+                    text: 'Cập nhật Nhà Xuất Bản thành công.',
+                    timer: 1500,
+                    showConfirmButton: false
+                }).then(() => {
+                    this.$router.push({ name: "nxb.list" });
+                });
             } catch (error) {
-                this.errorMessage = "Cập nhật thất bại. Vui lòng thử lại!";
+                // Thay thế errorMessage bằng Swal.fire
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi!',
+                    text: 'Cập nhật thất bại. Vui lòng thử lại!',
+                });
                 console.error(error);
             }
         },

@@ -1,3 +1,4 @@
+// File: src/views/docgia/DocGiaList.vue
 <template>
     <div class="container mt-4">
         <h2 class="mb-3">Danh sách Độc Giả</h2>
@@ -5,8 +6,6 @@
         <router-link to="/docgia/add" class="btn btn-primary mb-3">
             Thêm Độc Giả
         </router-link>
-
-        <div v-if="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
 
         <table class="table table-striped table-hover">
             <thead>
@@ -50,13 +49,13 @@
 
 <script>
 import DocGiaService from "@/services/docgia.service";
+import Swal from "sweetalert2";
 
 export default {
     name: "DocGiaList",
     data() {
         return {
             docGiaList: [],
-            errorMessage: "",
         };
     },
     methods: {
@@ -64,17 +63,41 @@ export default {
             try {
                 this.docGiaList = await DocGiaService.getAll();
             } catch (error) {
-                this.errorMessage = "Không thể tải danh sách Độc Giả.";
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi tải dữ liệu!',
+                    text: 'Không thể tải danh sách Độc Giả. Vui lòng kiểm tra Server!',
+                });
                 console.error(error);
             }
         },
         async deleteDocGia(id) {
-            if (confirm("Bạn có chắc muốn xóa Độc Giả này?")) {
+            const result = await Swal.fire({
+                title: 'Xác nhận xóa?',
+                text: "Bạn có chắc muốn xóa Độc Giả này? Hành động này không thể hoàn tác!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Có, xóa!',
+                cancelButtonText: 'Hủy'
+            });
+
+            if (result.isConfirmed) {
                 try {
                     await DocGiaService.delete(id);
                     this.docGiaList = this.docGiaList.filter((dg) => dg._id !== id);
+                    Swal.fire(
+                        'Đã xóa!',
+                        'Độc Giả đã được xóa thành công.',
+                        'success'
+                    );
                 } catch (error) {
-                    this.errorMessage = "Xóa thất bại.";
+                    Swal.fire(
+                        'Lỗi!',
+                        'Xóa thất bại. Vui lòng thử lại!',
+                        'error'
+                    );
                     console.error(error);
                 }
             }

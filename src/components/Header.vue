@@ -17,6 +17,9 @@
                         <RouterLink class="nav-link" to="/sach">Sách</RouterLink>
                     </li>
                     <li class="nav-item">
+                        <RouterLink class="nav-link" to="/nhaxuatban">Nhà xuất bản</RouterLink>
+                    </li>
+                    <li class="nav-item">
                         <RouterLink class="nav-link" to="/theodoimuonsach">Theo dõi mượn</RouterLink>
                     </li>
                     <!-- <li class="nav-item">

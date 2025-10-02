@@ -2,10 +2,6 @@
     <div class="container mt-4">
         <h2 class="mb-3">Cập Nhật Sách</h2>
 
-        <div v-if="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
-        <div v-if="successMessage" class="alert alert-success">{{ successMessage }}</div>
-
-        <!-- Truyền cả sach + nxbList xuống form -->
         <SachForm v-if="sach" :sach="sach" :nxbList="nxbList" @submit:sach="updateSach" />
         <p v-else>Đang tải dữ liệu...</p>
     </div>
@@ -15,38 +11,48 @@
 import SachForm from "@/components/sach/SachForm.vue";
 import SachService from "@/services/sach.service";
 import NxbService from "@/services/nhaxuatban.service";
+import Swal from "sweetalert2";
 
 export default {
     name: "SachEdit",
     components: { SachForm },
     data() {
         return {
-            sach: null,       // dữ liệu sách cũ
-            nxbList: [],      // danh sách nhà xuất bản
-            errorMessage: "",
-            successMessage: "",
+            sach: null,
+            nxbList: [],
         };
     },
     methods: {
         async loadData() {
             try {
-                // lấy dữ liệu sách cũ
-                this.sach = await SachService.get(this.$route.params.id);
+                // 1. Tải danh sách Nhà Xuất Bản trước
+                const resNxb = await NxbService.getAll();
+                this.nxbList = resNxb.data || resNxb;
 
-                // load danh sách NXB
-                this.nxbList = await NxbService.getAll();
+                // 2. Tải dữ liệu Sách
+                const resSach = await SachService.get(this.$route.params.id);
+                const dataSach = resSach.data || resSach;
+
+                // 3. Chuẩn hóa MaNXB: Thay thế _id bằng MaNXB hiển thị
+                const maNxbHienThi = this.nxbList.find(nxb => nxb._id === dataSach.MaNXB)?.MaNXB || dataSach.MaNXB;
+
+                // 4. Cập nhật đối tượng sach với MaNXB đã chuẩn hóa
+                this.sach = {
+                    ...dataSach, // Giữ nguyên các trường khác
+                    MaNXB: maNxbHienThi, // Gán Mã hiển thị cho form
+                };
             } catch (error) {
-                this.errorMessage = "Không thể tải dữ liệu.";
+                Swal.fire("Lỗi", "Không thể tải dữ liệu.", "error");
                 console.error(error);
             }
         },
         async updateSach(updatedSach) {
             try {
-                await SachService.update(this.$route.params.id, updatedSach);
-                this.successMessage = "Cập nhật thành công!";
+                const res = await SachService.update(this.$route.params.id, updatedSach);
+                Swal.fire("Thành công", res.message, "success");
                 setTimeout(() => this.$router.push({ name: "sach.list" }), 1500);
             } catch (error) {
-                this.errorMessage = "Cập nhật thất bại.";
+                Swal.fire("Lỗi", "Cập nhật thất bại.", "error");
                 console.error(error);
             }
         },

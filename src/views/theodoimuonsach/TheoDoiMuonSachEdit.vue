@@ -36,23 +36,26 @@ export default {
                 const id = this.$route.params.id;
                 const data = await TheoDoiMuonSachService.get(id);
 
-                // Đồng bộ field đúng với form
+                // Load thêm danh sách độc giả và sách trước
+                const resDocGia = await DocGiaService.getAll();
+                const resSach = await SachService.getAll();
+
+                this.docGiaList = resDocGia.data || resDocGia;
+                this.sachList = resSach.data || resSach;
+
                 this.td = {
                     _id: data._id,
-                    MaSach: data.MaSach || "",
-                    MaDocGia: data.MaDocGia || "",
+                    MaSach: this.sachList.find(s => s._id === data.MaSach)?.MaSach || data.MaSach,
+                    MaDocGia: this.docGiaList.find(dg => dg._id === data.MaDocGia)?.MaDocGia || data.MaDocGia,
                     NgayMuon: data.NgayMuon ? data.NgayMuon.slice(0, 10) : "",
                     NgayTra: data.NgayTra ? data.NgayTra.slice(0, 10) : "",
                 };
-
-                // Load thêm danh sách độc giả và sách
-                this.docGiaList = await DocGiaService.getAll();
-                this.sachList = await SachService.getAll();
             } catch (error) {
                 this.errorMessage = "Không thể tải dữ liệu.";
                 console.error(error);
             }
         },
+
         async updateTheoDoi(updatedTD) {
             try {
                 await TheoDoiMuonSachService.update(this.$route.params.id, updatedTD);

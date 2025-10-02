@@ -62,7 +62,14 @@ export default {
     watch: {
         sach: {
             handler(newVal) {
-                this.sachLocal = newVal ? JSON.parse(JSON.stringify(newVal)) : {};
+                if (newVal) {
+                    this.sachLocal = JSON.parse(JSON.stringify(newVal));
+                    if (this.sachLocal.MaNXB && typeof this.sachLocal.MaNXB !== "string") {
+                        this.sachLocal.MaNXB = String(this.sachLocal.MaNXB);
+                    }
+                } else {
+                    this.sachLocal = {};
+                }
             },
             immediate: true,
             deep: true,

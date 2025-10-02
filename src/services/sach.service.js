@@ -6,21 +6,40 @@ class SachService {
     this.api = createApiClient(baseURL);
   }
 
-  // Hàm CRUD
-  async getAll() {
-    return (await this.api.get("/")).data;
+  // Lấy tất cả sách
+  async getAll(query = {}) {
+    const res = await this.api.get("/", { params: query });
+    return res.data; // { message, data: [...] }
   }
+
+  // Lấy sách theo ID
   async get(id) {
-    return (await this.api.get(`/${id}`)).data;
+    const res = await this.api.get(`/${id}`);
+    return res.data; // { message, data: {...} }
   }
+
+  // Thêm sách mới
   async create(data) {
-    return (await this.api.post("/", data)).data;
+    const res = await this.api.post("/", data);
+    return res.data; // { message, data: {...} }
   }
+
+  // Cập nhật sách
   async update(id, data) {
-    return (await this.api.put(`/${id}`, data)).data;
+    const res = await this.api.put(`/${id}`, data);
+    return res.data; // { message, data: {...} }
   }
+
+  // Xóa sách theo ID
   async delete(id) {
-    return await this.api.delete(`/${id}`);
+    const res = await this.api.delete(`/${id}`);
+    return res.data; // { message, data: {...} }
+  }
+
+  // Xóa toàn bộ sách
+  async deleteAll() {
+    const res = await this.api.delete("/");
+    return res.data; // { message, data: { deletedCount } }
   }
 }
 

@@ -50,6 +50,7 @@
 
 <script>
 import SachService from "@/services/sach.service";
+import Swal from "sweetalert2";
 
 export default {
     name: "SachList",
@@ -62,28 +63,34 @@ export default {
     methods: {
         async loadSach() {
             try {
-                this.sachList = await SachService.getAll();
+                const res = await SachService.getAll();
+                this.sachList = res.data; // ✅ lấy mảng sách
             } catch (error) {
                 this.errorMessage = "Không thể tải danh sách Sách.";
                 console.error(error);
             }
         },
         async deleteSach(id) {
-            if (confirm("Bạn có chắc muốn xóa Sách này?")) {
+            const confirm = await Swal.fire({
+                title: "Bạn có chắc muốn xóa?",
+                text: "Dữ liệu sẽ bị mất vĩnh viễn!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Xóa",
+                cancelButtonText: "Hủy",
+            });
+
+            if (confirm.isConfirmed) {
                 try {
                     const res = await SachService.delete(id);
-                    if (res.status === 200 || res.status === 204) {
-                        this.sachList = this.sachList.filter((s) => s._id !== id);
-                    } else {
-                        this.errorMessage = "Xóa thất bại.";
-                    }
+                    this.sachList = this.sachList.filter((s) => s._id !== id);
+                    Swal.fire("Thành công", res.message, "success"); // ✅ dùng message từ backend
                 } catch (error) {
-                    this.errorMessage = "Xóa thất bại.";
+                    Swal.fire("Lỗi", "Xóa thất bại.", "error");
                     console.error(error);
                 }
             }
         }
-
     },
     mounted() {
         this.loadSach();

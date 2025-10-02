@@ -1,9 +1,7 @@
+// File: src/views/docgia/DocGiaEdit.vue
 <template>
     <div class="container mt-4">
         <h2 class="mb-3">Cập Nhật Độc Giả</h2>
-
-        <div v-if="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
-        <div v-if="successMessage" class="alert alert-success">{{ successMessage }}</div>
 
         <DocGiaForm v-if="docGia" :docGia="docGia" @submit:docgia="updateDocGia" />
         <p v-else>Đang tải dữ liệu...</p>
@@ -13,6 +11,7 @@
 <script>
 import DocGiaForm from "@/components/docgia/DocGiaForm.vue";
 import DocGiaService from "@/services/docgia.service";
+import Swal from "sweetalert2"; // 👈 Import SweetAlert2
 
 export default {
     name: "DocGiaEdit",
@@ -20,8 +19,6 @@ export default {
     data() {
         return {
             docGia: null,
-            errorMessage: "",
-            successMessage: "",
         };
     },
     methods: {
@@ -29,17 +26,36 @@ export default {
             try {
                 this.docGia = await DocGiaService.get(this.$route.params.id);
             } catch (error) {
-                this.errorMessage = "Không thể tải dữ liệu Độc Giả.";
+                // Thay thế errorMessage bằng Swal.fire
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi!',
+                    text: 'Không thể tải dữ liệu Độc Giả.',
+                });
                 console.error(error);
             }
         },
         async updateDocGia(updatedDocGia) {
             try {
                 await DocGiaService.update(this.$route.params.id, updatedDocGia);
-                this.successMessage = "Cập nhật thành công!";
-                setTimeout(() => this.$router.push({ name: "docgia.list" }), 1500);
+
+                // Thay thế successMessage bằng Swal.fire
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công!',
+                    text: 'Cập nhật Độc Giả thành công.',
+                    timer: 1500,
+                    showConfirmButton: false
+                }).then(() => {
+                    this.$router.push({ name: "docgia.list" });
+                });
             } catch (error) {
-                this.errorMessage = "Cập nhật thất bại.";
+                // Thay thế errorMessage bằng Swal.fire
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi!',
+                    text: 'Cập nhật thất bại. Vui lòng thử lại!',
+                });
                 console.error(error);
             }
         },
