@@ -25,6 +25,7 @@ import TheoDoiMuonSachList from "@/views/theodoimuonsach/TheoDoiMuonSachList.vue
 import TheoDoiMuonSachAdd from "@/views/theodoimuonsach/TheoDoiMuonSachAdd.vue";
 import TheoDoiMuonSachEdit from "@/views/theodoimuonsach/TheoDoiMuonSachEdit.vue";
 
+import ThongKeView from "@/views/ThongKeView.vue";
 const routes = [
   // ROUTE TRANG CHỦ
   {
@@ -144,6 +145,16 @@ const routes = [
     component: TheoDoiMuonSachEdit,
     props: true,
     meta: { requiresAuth: true },
+  },
+
+  {
+    path: "/thongke",
+    name: "thongke",
+    component: ThongKeView,
+    meta: {
+      requiresAuth: true,
+      roles: ["Admin", "QuanLy"],
+    },
   },
 ];
 
