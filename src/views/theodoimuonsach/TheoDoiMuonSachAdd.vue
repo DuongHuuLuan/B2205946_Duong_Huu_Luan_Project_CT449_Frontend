@@ -14,7 +14,6 @@
 import TheoDoiMuonSachForm from "@/components/theodoimuonsach/TheoDoiMuonSachForm.vue";
 import TheoDoiMuonSachService from "@/services/theodoimuonsach.service";
 
-// import service lấy dữ liệu độc giả và sách
 import DocGiaService from "@/services/docgia.service";
 import SachService from "@/services/sach.service";
 

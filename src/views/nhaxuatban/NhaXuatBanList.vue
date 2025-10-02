@@ -16,7 +16,7 @@
 <script>
 import NhaXuatBanService from "@/services/nhaxuatban.service";
 import NhaXuatBanTable from "@/components/nhaxuatban/NhaXuatBanTable.vue";
-import Swal from "sweetalert2"; // 👈 Import SweetAlert2
+import Swal from "sweetalert2";
 
 export default {
     name: "NhaXuatBanList",
@@ -24,7 +24,6 @@ export default {
     data() {
         return {
             nxbList: [],
-            // Xóa errorMessage
         };
     },
     methods: {
@@ -32,9 +31,7 @@ export default {
             try {
                 const data = await NhaXuatBanService.getAll();
                 this.nxbList = data;
-                // Xóa this.errorMessage = "";
             } catch (error) {
-                // Thay thế errorMessage bằng Swal.fire hoặc chỉ console.error cho lỗi tải
                 Swal.fire({
                     icon: 'error',
                     title: 'Lỗi tải dữ liệu!',
@@ -44,7 +41,6 @@ export default {
             }
         },
         async deleteNXB(id) {
-            // Thay thế confirm() bằng Swal.fire() với cấu hình xác nhận
             const result = await Swal.fire({
                 title: 'Xác nhận xóa?',
                 text: "Bạn có chắc muốn xóa Nhà Xuất Bản này? Hành động này không thể hoàn tác!",
@@ -59,17 +55,13 @@ export default {
             if (result.isConfirmed) {
                 try {
                     await NhaXuatBanService.delete(id);
-                    // Lọc bằng nxb._id
                     this.nxbList = this.nxbList.filter((nxb) => nxb._id !== id);
-
-                    // Thông báo xóa thành công
                     Swal.fire(
                         'Đã xóa!',
                         'Nhà Xuất Bản đã được xóa thành công.',
                         'success'
                     );
                 } catch (error) {
-                    // Thông báo xóa thất bại
                     Swal.fire(
                         'Lỗi!',
                         'Xóa thất bại. Vui lòng thử lại!',

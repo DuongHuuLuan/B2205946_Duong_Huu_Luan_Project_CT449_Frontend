@@ -64,7 +64,7 @@ export default {
         async loadSach() {
             try {
                 const res = await SachService.getAll();
-                this.sachList = res.data; // ✅ lấy mảng sách
+                this.sachList = res.data;
             } catch (error) {
                 this.errorMessage = "Không thể tải danh sách Sách.";
                 console.error(error);
@@ -84,7 +84,7 @@ export default {
                 try {
                     const res = await SachService.delete(id);
                     this.sachList = this.sachList.filter((s) => s._id !== id);
-                    Swal.fire("Thành công", res.message, "success"); // ✅ dùng message từ backend
+                    Swal.fire("Thành công", res.message, "success");
                 } catch (error) {
                     Swal.fire("Lỗi", "Xóa thất bại.", "error");
                     console.error(error);

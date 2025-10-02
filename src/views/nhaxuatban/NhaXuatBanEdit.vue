@@ -52,7 +52,6 @@ export default {
                     this.$router.push({ name: "nxb.list" });
                 });
             } catch (error) {
-                // Thay thế errorMessage bằng Swal.fire
                 Swal.fire({
                     icon: 'error',
                     title: 'Lỗi!',

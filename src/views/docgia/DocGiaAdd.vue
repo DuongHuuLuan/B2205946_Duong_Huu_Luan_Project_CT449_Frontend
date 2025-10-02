@@ -10,18 +10,15 @@
 <script>
 import DocGiaForm from "@/components/docgia/DocGiaForm.vue";
 import DocGiaService from "@/services/docgia.service";
-import Swal from "sweetalert2"; // 👈 Import SweetAlert2
+import Swal from "sweetalert2";
 
 export default {
     name: "DocGiaAdd",
     components: { DocGiaForm },
-    // Xóa data() { return { errorMessage: "", successMessage: "", }; },
     methods: {
         async addDocGia(newDocGia) {
             try {
                 await DocGiaService.create(newDocGia);
-
-                // Thay thế successMessage bằng Swal.fire
                 Swal.fire({
                     icon: 'success',
                     title: 'Thành công!',
@@ -33,7 +30,6 @@ export default {
                 });
 
             } catch (error) {
-                // Thay thế errorMessage bằng Swal.fire
                 Swal.fire({
                     icon: 'error',
                     title: 'Lỗi!',

@@ -35,8 +35,6 @@ export default {
             try {
                 const id = this.$route.params.id;
                 const data = await TheoDoiMuonSachService.get(id);
-
-                // Load thêm danh sách độc giả và sách trước
                 const resDocGia = await DocGiaService.getAll();
                 const resSach = await SachService.getAll();
 

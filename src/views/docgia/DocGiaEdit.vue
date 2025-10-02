@@ -11,7 +11,7 @@
 <script>
 import DocGiaForm from "@/components/docgia/DocGiaForm.vue";
 import DocGiaService from "@/services/docgia.service";
-import Swal from "sweetalert2"; // 👈 Import SweetAlert2
+import Swal from "sweetalert2";
 
 export default {
     name: "DocGiaEdit",
@@ -26,7 +26,6 @@ export default {
             try {
                 this.docGia = await DocGiaService.get(this.$route.params.id);
             } catch (error) {
-                // Thay thế errorMessage bằng Swal.fire
                 Swal.fire({
                     icon: 'error',
                     title: 'Lỗi!',
@@ -38,8 +37,6 @@ export default {
         async updateDocGia(updatedDocGia) {
             try {
                 await DocGiaService.update(this.$route.params.id, updatedDocGia);
-
-                // Thay thế successMessage bằng Swal.fire
                 Swal.fire({
                     icon: 'success',
                     title: 'Thành công!',
@@ -50,7 +47,6 @@ export default {
                     this.$router.push({ name: "docgia.list" });
                 });
             } catch (error) {
-                // Thay thế errorMessage bằng Swal.fire
                 Swal.fire({
                     icon: 'error',
                     title: 'Lỗi!',

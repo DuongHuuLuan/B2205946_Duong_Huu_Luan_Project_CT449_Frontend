@@ -48,31 +48,26 @@ export default {
 <script>
 import NhaXuatBanForm from '@/components/nhaxuatban/NhaXuatBanForm.vue';
 import nhaxuatbanService from '@/services/nhaxuatban.service';
-import Swal from "sweetalert2"; // 👈 Import SweetAlert2
+import Swal from "sweetalert2";
 
 export default {
     name: "NhaXuatBanAdd",
     components: { NhaXuatBanForm },
-    // Xóa data() { return { errorMessage: "", successMessage: "", }; },
     methods: {
         async addNXB(nxb) {
             try {
-                // Giả định API trả về res (không cần gán vào biến)
                 const res = await nhaxuatbanService.create(nxb);
-
-                // Thay thế successMessage bằng Swal.fire
                 Swal.fire({
                     icon: 'success',
                     title: 'Thành công!',
                     text: 'Thêm mới Nhà Xuất Bản thành công.',
-                    timer: 1500, // Tự động đóng sau 1.5 giây
+                    timer: 1500,
                     showConfirmButton: false
                 }).then(() => {
                     this.$router.push({ name: "nxb.list" });
                 });
 
             } catch (error) {
-                // Thay thế errorMessage bằng Swal.fire
                 Swal.fire({
                     icon: 'error',
                     title: 'Lỗi!',
