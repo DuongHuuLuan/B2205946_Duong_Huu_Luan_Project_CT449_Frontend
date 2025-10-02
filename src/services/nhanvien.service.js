@@ -6,18 +6,22 @@ class NhanVienService {
   constructor(baseURL) {
     this.api = createApiClient(baseURL);
   }
+
+  async create(data) {
+    return (await this.api.post("/", data)).data;
+  }
+
   /**
-   * @description Gửi thông tin đăng nhập đến Backend và nhận token/user.
-   * @param {Object} credentials - { MSNV Password }
+   * @description
+   * @param {Object} credentials
    */
   async login(credentials) {
-    // Giả định Backend có route POST /api/nhanvien/login
     const result = await this.api.post("/login", credentials);
-    return result.data; // Trả về thông tin Nhân viên và/hoặc token
+    return result.data;
   }
   /**
    * @description
-   * @param {Object} data - { MSNV, HoTenNV, Password, ChucVu, DiaChi, SoDienThoai}
+   * @param {Object} data
    */
 
   async register(data) {
@@ -26,28 +30,28 @@ class NhanVienService {
   }
 
   /**
-   * @description Lấy danh sách tất cả nhân viên
+   * @description
    */
   async getAll() {
     return (await this.api.get("/")).data;
   }
 
   /**
-   * @description Lấy thông tin chi tiết 1 nhân viên theo ID
+   * @description
    */
   async getById(id) {
     return (await this.api.get(`/${id}`)).data;
   }
 
   /**
-   * @description Cập nhật thông tin nhân viên
+   * @description
    */
   async update(id, data) {
     return (await this.api.put(`/${id}`, data)).data;
   }
 
   /**
-   * @description Xóa 1 nhân viên
+   * @description
    */
   async delete(id) {
     return (await this.api.delete(`/${id}`)).data;

@@ -6,10 +6,6 @@
                     Đăng nhập
                 </h3>
 
-                <div v-if="error" class="alert alert-danger text-center">
-                    {{ error }}
-                </div>
-
                 <form @submit.prevent="handleLogin">
                     <div class="mb-3 input-group">
                         <span class="input-group-text">
@@ -43,6 +39,7 @@
 import AuthService from "@/services/auth.service";
 import { useAuthStore } from "@/stores/authStore";
 import "@/assets/LoginForm.css";
+import Swal from "sweetalert2";
 
 export default {
     name: "LoginForm",
@@ -52,30 +49,40 @@ export default {
                 MSNV: "",
                 Password: "",
             },
-            error: null,
         };
     },
     methods: {
         async handleLogin() {
-            this.error = null;
             try {
-                // Gọi API đăng nhập
                 const response = await AuthService.login(this.loginData);
 
-                // Lưu token
                 AuthService.saveToken(response.token);
-
-                // Lưu thông tin user vào Pinia Store
                 const authStore = useAuthStore();
                 authStore.setUser(response.user);
 
-                // Chuyển hướng
-                this.$router.push({ name: "home" });
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Đăng nhập thành công! 🎉',
+                    text: `Chào mừng, ${response.user.HoTenNV} (${response.user.ChucVu}).`,
+                    timer: 1500,
+                    showConfirmButton: false
+                }).then(() => {
+                    this.$router.push({ name: "home" });
+                });
+
             } catch (err) {
                 console.error("Lỗi đăng nhập:", err);
-                this.error =
+
+                const errorMessage =
                     err.response?.data?.message ||
                     "Tên đăng nhập hoặc mật khẩu không đúng. Vui lòng thử lại.";
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Đăng nhập thất bại',
+                    text: errorMessage,
+                    showConfirmButton: true
+                });
             }
         },
     },

@@ -22,9 +22,9 @@
                     <li class="nav-item">
                         <RouterLink class="nav-link" to="/theodoimuonsach">Theo dõi mượn</RouterLink>
                     </li>
-                    <!-- <li class="nav-item">
+                    <li class="nav-item">
                         <RouterLink class="nav-link" to="/nhanvien">Nhân viên</RouterLink>
-                    </li> -->
+                    </li>
                 </ul>
 
                 <ul class="navbar-nav ms-auto">

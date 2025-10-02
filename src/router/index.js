@@ -17,6 +17,10 @@ import SachList from "@/views/sach/SachList.vue";
 import SachAdd from "@/views/sach/SachAdd.vue";
 import SachEdit from "@/views/sach/SachEdit.vue";
 
+import NhanVienList from "@/views/nhanvien/NhanVienList.vue";
+import NhanVienAdd from "@/views/nhanvien/NhanVienAdd.vue";
+import NhanVienEdit from "@/views/nhanvien/NhanVienEdit.vue";
+
 import TheoDoiMuonSachList from "@/views/theodoimuonsach/TheoDoiMuonSachList.vue";
 import TheoDoiMuonSachAdd from "@/views/theodoimuonsach/TheoDoiMuonSachAdd.vue";
 import TheoDoiMuonSachEdit from "@/views/theodoimuonsach/TheoDoiMuonSachEdit.vue";
@@ -80,6 +84,26 @@ const routes = [
     meta: { requiresAuth: true },
   },
 
+  // các routes nhân viên
+  {
+    path: "/nhanvien",
+    name: "nhanvien.list",
+    component: NhanVienList,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/nhanvien/add",
+    name: "nhanvien.add",
+    component: NhanVienAdd,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/nhanvien/:id",
+    name: "nhanvien.edit",
+    component: NhanVienEdit,
+    props: true,
+    meta: { requiresAuth: true },
+  },
   // Các routes sách
   {
     path: "/sach",

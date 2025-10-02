@@ -15,8 +15,13 @@ import Header from "@/components/Header.vue";
 </template>
 
 <style>
-.page {
-  max-width: 400px;
-  margin: auto;
+#app-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-grow-1 {
+  flex-grow: 1;
 }
 </style>

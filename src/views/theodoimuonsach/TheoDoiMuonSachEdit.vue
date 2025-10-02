@@ -2,7 +2,6 @@
     <div class="container mt-4">
         <h2>Cập Nhật Theo Dõi Mượn Sách</h2>
 
-        <!-- Truyền đủ td + danh sách xuống form -->
         <TheoDoiMuonSachForm v-if="td" :td="td" :docGiaList="docGiaList" :sachList="sachList"
             @submit:td="updateTheoDoi" />
         <p v-else>Đang tải dữ liệu...</p>
