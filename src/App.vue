@@ -13,7 +13,7 @@ import Header from "@/components/Header.vue";
     </div>
   </div>
 </template>
-
+<!-- 
 <style>
 #app-wrapper {
   min-height: 100vh;
@@ -24,4 +24,4 @@ import Header from "@/components/Header.vue";
 .flex-grow-1 {
   flex-grow: 1;
 }
-</style>
+</style> -->

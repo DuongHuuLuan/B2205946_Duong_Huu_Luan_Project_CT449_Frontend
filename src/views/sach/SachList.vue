@@ -17,7 +17,7 @@
                     <th>Số Quyển</th>
                     <th>Năm XB</th>
                     <th>Mã NXB</th>
-                    <th>Tác Giả / Nguồn Gốc</th>
+                    <th>Tác Giả</th>
                     <th>Hành động</th>
                 </tr>
             </thead>
