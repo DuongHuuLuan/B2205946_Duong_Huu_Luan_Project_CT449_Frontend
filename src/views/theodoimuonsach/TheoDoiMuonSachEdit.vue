@@ -46,6 +46,8 @@ export default {
                     MaDocGia: this.docGiaList.find(dg => dg._id === data.MaDocGia)?.MaDocGia || data.MaDocGia,
                     NgayMuon: data.NgayMuon ? data.NgayMuon.slice(0, 10) : "",
                     NgayTra: data.NgayTra ? data.NgayTra.slice(0, 10) : "",
+                    TrangThai: data.TrangThai || "Chờ duyệt",
+
                 };
             } catch (error) {
                 this.errorMessage = "Không thể tải dữ liệu.";
@@ -53,16 +55,31 @@ export default {
             }
         },
 
+        // async updateTheoDoi(updatedTD) {
+        //     try {
+        //         await TheoDoiMuonSachService.update(this.$route.params.id, updatedTD);
+        //         this.successMessage = "Cập nhật thành công!";
+        //         setTimeout(() => this.$router.push({ name: "theodoimuonsach.list" }), 1500);
+        //     } catch (error) {
+        //         this.errorMessage = "Cập nhật thất bại.";
+        //         console.error(error);
+        //     }
+        // },
         async updateTheoDoi(updatedTD) {
             try {
-                await TheoDoiMuonSachService.update(this.$route.params.id, updatedTD);
+                const payload = {
+                    ...updatedTD,
+                    MSNV: this.$store.state.currentUser.MSNV
+                };
+                await TheoDoiMuonSachService.update(this.$route.params.id, payload);
                 this.successMessage = "Cập nhật thành công!";
                 setTimeout(() => this.$router.push({ name: "theodoimuonsach.list" }), 1500);
             } catch (error) {
                 this.errorMessage = "Cập nhật thất bại.";
                 console.error(error);
             }
-        },
+        }
+
     },
     mounted() {
         this.loadData();
