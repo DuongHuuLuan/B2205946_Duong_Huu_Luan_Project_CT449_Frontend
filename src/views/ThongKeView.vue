@@ -1,6 +1,6 @@
 <template>
     <div class="thongke-container p-4">
-        <h2 class="mb-4 text-center text-primary">Dashboard Thống Kê Thư Viện</h2>
+        <h2 class="mb-4 text-center text-primary">THỐNG KÊ MƯỢN SÁCH</h2>
 
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-3 mb-5">
             <StatCard title="Tổng số Sách" :value="generalStats.totalBooks" color="bg-primary" />
@@ -9,36 +9,6 @@
             <StatCard title="Tổng Lượt Mượn" :value="generalStats.totalBorrows" color="bg-info" />
             <StatCard title="Tổng Nhân Viên" :value="generalStats.totalStaff" color="bg-warning" />
             <StatCard title="Tổng NXB" :value="generalStats.totalPublishers" color="bg-secondary" />
-        </div>
-
-        <div class="row g-4">
-            <!-- <div class="col-lg-6">
-                <div class="card shadow-sm p-3">
-                    <h5 class="card-title text-center">Sách theo Nhà Xuất Bản</h5>
-
-                    <div v-if="publisherChartData">
-                        <Bar :data="publisherChartData" />
-                    </div>
-
-                    <p v-else-if="!isLoading" class="text-center text-muted p-5">
-                        Không có dữ liệu sách theo Nhà Xuất Bản.
-                    </p>
-                </div>
-            </div> -->
-
-            <!-- <div class="col-lg-6">
-                <div class="card shadow-sm p-3">
-                    <h5 class="card-title text-center">Cơ cấu Nhân viên</h5>
-
-                    <div v-if="staffChartData">
-                        <Pie :data="staffChartData" />
-                    </div>
-
-                    <p v-else-if="!isLoading" class="text-center text-muted p-5">
-                        Không có dữ liệu nhân viên theo Chức vụ.
-                    </p>
-                </div>
-            </div> -->
         </div>
 
         <div class="row mt-4">

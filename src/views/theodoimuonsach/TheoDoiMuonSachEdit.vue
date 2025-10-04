@@ -86,6 +86,7 @@ export default {
     },
 };
 </script> -->
+
 <template>
     <div class="container mt-4">
         <h2>Cập Nhật Theo Dõi Mượn Sách</h2>
@@ -96,6 +97,7 @@ export default {
 
         <div v-if="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
         <div v-if="successMessage" class="alert alert-success">{{ successMessage }}</div>
+
     </div>
 </template>
 
@@ -113,9 +115,9 @@ export default {
     components: { TheoDoiMuonSachForm },
     data() {
         return {
-            td: null,           // dữ liệu cũ của bản ghi
-            docGiaList: [],     // danh sách độc giả để select
-            sachList: [],       // danh sách sách để select
+            td: null,// dữ liệu cũ của bản ghi
+            docGiaList: [], // danh sách độc giả để select
+            sachList: [], // danh sách sách để select
             errorMessage: "",
             successMessage: "",
         };
@@ -128,6 +130,7 @@ export default {
         async loadData() {
             try {
                 const id = this.$route.params.id;
+                // Gọi API để lấy dữ liệu, bao gồm các trường tính toán tạm thời
                 const data = await TheoDoiMuonSachService.get(id);
                 const resDocGia = await DocGiaService.getAll();
                 const resSach = await SachService.getAll();
@@ -138,9 +141,10 @@ export default {
                 // 1. Ánh xạ MaDocGia từ _id
                 const maDocGia = this.docGiaList.find(dg => dg._id === data.MaDocGia)?.MaDocGia || data.MaDocGia;
 
-                // 2. Gán toàn bộ data, đảm bảo ChiTietMuon là mảng và định dạng ngày tháng
+                // 2. Gán toàn bộ data và định dạng lại
                 this.td = {
-                    ...data, // Giữ lại _id, TrangThai, và mảng ChiTietMuon (nếu có)
+                    ...data, // GIỮ LẠI TẤT CẢ, BAO GỒM TIENPHATTAMTHOI VÀ TONGTHANHTOAN
+
                     MaDocGia: maDocGia,
 
                     // Định dạng ngày tháng
@@ -165,9 +169,12 @@ export default {
             try {
                 const payload = {
                     ...updatedTD,
-                    // Giả sử bạn lấy MSNV từ Vuex Store
                     MSNV: this.authStore.getMSNV
                 };
+
+                // Loại bỏ các trường tạm thời không cần gửi lên DB
+                delete payload.TienPhatTamThoi;
+                delete payload.TongThanhToan;
 
                 await TheoDoiMuonSachService.update(this.$route.params.id, payload);
 
@@ -176,7 +183,9 @@ export default {
                 setTimeout(() => this.$router.push({ name: "theodoimuonsach.list" }), 1500);
             } catch (error) {
                 this.errorMessage = "Cập nhật thất bại.";
-                Swal.fire("Lỗi", "Cập nhật thất bại. Vui lòng kiểm tra lại dữ liệu.", "error");
+                // Cố gắng lấy thông báo lỗi từ backend để hiển thị chính xác hơn
+                const errorMsg = error.response?.data?.message || "Cập nhật thất bại. Vui lòng kiểm tra lại dữ liệu.";
+                Swal.fire("Lỗi", errorMsg, "error");
                 console.error(error);
             }
         }

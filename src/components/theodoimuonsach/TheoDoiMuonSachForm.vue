@@ -163,8 +163,8 @@ export default {
         </div>
 
         <div class="mb-3">
-            <label for="NgayTra" class="form-label">Ngày Trả:</label>
-            <input type="date" id="NgayTra" class="form-control" v-model="tdLocal.NgayTra" />
+            <label for="NgayTra" class="form-label">Hạn Trả:</label>
+            <input type="date" id="HanTra" class="form-control" v-model="tdLocal.HanTra" />
         </div>
 
         <div class="mb-3" v-if="tdLocal._id">
@@ -176,6 +176,23 @@ export default {
                 <option value="Trễ hạn">Trễ hạn</option>
             </select>
         </div>
+
+        <div v-if="tdLocal.TrangThai === 'Trễ hạn' && tdLocal.TienPhatTamThoi > 0" class="alert alert-danger mt-3">
+            <h4><i class="fas fa-exclamation-triangle"></i> CẢNH BÁO: PHIẾU MƯỢN ĐÃ TRỄ HẠN</h4>
+            <p>
+                <strong>Tổng tiền thuê:</strong> {{ formatCurrency(tdLocal.TongTien) }}
+            </p>
+            <p>
+                <strong>Tiền phạt tạm tính:</strong>
+                <span class="text-danger">{{ formatCurrency(tdLocal.TienPhatTamThoi) }}</span>
+            </p>
+            <hr>
+            <p class="h5">
+                <strong>TỔNG THANH TOÁN (Tạm tính):</strong>
+                <span class="text-primary">{{ formatCurrency(tdLocal.TongThanhToan) }}</span>
+            </p>
+        </div>
+
 
         <button type="submit" class="btn btn-success">
             <i class="fas fa-save"></i> {{ tdLocal._id ? "Cập Nhật" : "Lưu" }}
@@ -226,9 +243,11 @@ export default {
                     this.tdLocal = {
                         MaDocGia: "",
                         ChiTietMuon: [], // Khởi tạo mảng cho thêm mới
-                        NgayMuon: "",
-                        NgayTra: "",
+                        NgayMuon: new Date().toISOString().split('T')[0],
+                        HanTra: "",
                         TrangThai: "Chờ duyệt",
+                        TienPhatTamThoi: 0,
+                        TongThanhToan: 0
                     };
                 }
             },
@@ -307,6 +326,10 @@ export default {
             if (!payload._id) {
                 delete payload.TrangThai; // Để Backend tự set "Chờ duyệt"
             }
+
+            // loại bỏ các trường tạm thời trước khi gửi lên API
+            delete payload.TienPhatTamThoi;
+            delete payload.TongThanhToan;
 
             this.$emit("submit:td", payload);
 
