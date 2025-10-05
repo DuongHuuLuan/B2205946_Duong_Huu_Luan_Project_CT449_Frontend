@@ -35,9 +35,10 @@
                             class="btn btn-warning btn-sm me-2">
                             Sửa
                         </router-link>
-                        <button class="btn btn-danger btn-sm" @click="deleteSach(sach._id)">
+                        <button v-if="!sach.isBorrowed" class="btn btn-danger btn-sm" @click="deleteSach(sach._id)">
                             Xóa
                         </button>
+                        <span v-else class="text-muted">Đang được mượn</span>
                     </td>
                 </tr>
                 <tr v-if="sachList.length === 0">
@@ -84,9 +85,10 @@ export default {
                 try {
                     const res = await SachService.delete(id);
                     this.sachList = this.sachList.filter((s) => s._id !== id);
-                    Swal.fire("Thành công", res.message, "success");
+                    Swal.fire("Thành công", res.message, "Xóa thành công");
                 } catch (error) {
-                    Swal.fire("Lỗi", "Xóa thất bại.", "error");
+                    const errMsg = error.response?.data?.message || "Xóa thất bại.";
+                    Swal.fire("Lỗi", errMsg, "error");
                     console.error(error);
                 }
             }

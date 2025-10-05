@@ -64,7 +64,7 @@ export default {
                 } catch (error) {
                     Swal.fire(
                         'Lỗi!',
-                        'Xóa thất bại. Vui lòng thử lại!',
+                        error.response?.data?.message || 'Xóa thất bại. Vui lòng thử l',
                         'error'
                     );
                     console.error(error);

@@ -23,9 +23,10 @@
                             Sửa
                         </router-link>
 
-                        <button class="btn btn-danger btn-sm" @click="handleDelete(nxb._id)">
+                        <button v-if="nxb.bookCount == 0" class="btn btn-danger btn-sm" @click="handleDelete(nxb._id)">
                             Xóa
                         </button>
+                        <span v-else class="text-muted">Còn {{ nxb.bookCount }} sách</span>
                     </td>
                 </tr>
                 <tr v-if="nxbList.length === 0">

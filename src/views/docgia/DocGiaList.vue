@@ -1,4 +1,3 @@
-// File: src/views/docgia/DocGiaList.vue
 <template>
     <div class="container mt-4">
         <h2 class="mb-3">Danh sách Độc Giả</h2>
@@ -34,9 +33,11 @@
                             class="btn btn-warning btn-sm me-2">
                             Sửa
                         </router-link>
-                        <button class="btn btn-danger btn-sm" @click="deleteDocGia(dg._id)">
+                        <!-- Ẩn nút Xóa nếu độc giả đang mượn sách -->
+                        <button v-if="!dg.hasBorrowed" class="btn btn-danger btn-sm" @click="deleteDocGia(dg._id)">
                             Xóa
                         </button>
+                        <span v-else class="text-muted">Đang mượn sách</span>
                     </td>
                 </tr>
                 <tr v-if="docGiaList.length === 0">
@@ -87,15 +88,11 @@ export default {
                 try {
                     await DocGiaService.delete(id);
                     this.docGiaList = this.docGiaList.filter((dg) => dg._id !== id);
-                    Swal.fire(
-                        'Đã xóa!',
-                        'Độc Giả đã được xóa thành công.',
-                        'success'
-                    );
+                    Swal.fire('Đã xóa!', 'Độc Giả đã được xóa thành công.', 'success');
                 } catch (error) {
                     Swal.fire(
                         'Lỗi!',
-                        'Xóa thất bại. Vui lòng thử lại!',
+                        error.response?.data?.message || 'Xóa thất bại. Vui lòng thử lại!',
                         'error'
                     );
                     console.error(error);
