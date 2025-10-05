@@ -1,5 +1,3 @@
-// src/services/api.service.js (ĐÃ BỔ SUNG)
-
 import axios from "axios";
 
 const commonConfig = {
